@@ -1,0 +1,34 @@
+[gd_scene load_steps=7 format=3 uid="uid://dtk01bbfdbi74"]
+
+[ext_resource type="PackedScene" uid="uid://8oy3xm2sff8" path="res://addons/character-controller/fps/fps_controller_3d.tscn" id="1_guv1s"]
+[ext_resource type="Script" path="res://addons/character-controller/example/main/player.gd" id="2_278d6"]
+[ext_resource type="Environment" uid="uid://b3cn01u84faiy" path="res://addons/character-controller/example/main/underwater.tres" id="3_bhpk8"]
+[ext_resource type="Script" path="res://scripts/PlayerWeaponController.gd" id="4_7518u"]
+[ext_resource type="PackedScene" path="res://addons/character-controller/example/main/audios/player_audios.tscn" id="4_txhu7"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_s1bd7"]
+radius = 0.677807
+
+[node name="Player" groups=["Player"] instance=ExtResource("1_guv1s")]
+script = ExtResource("2_278d6")
+input_back_action_name = "move_backward"
+input_forward_action_name = "move_forward"
+input_left_action_name = "move_left"
+input_right_action_name = "move_right"
+input_sprint_action_name = "move_sprint"
+input_jump_action_name = "move_jump"
+input_crouch_action_name = "move_crouch"
+input_fly_mode_action_name = "move_fly_mode"
+underwater_env = ExtResource("3_bhpk8")
+
+[node name="Weapon Holder" type="Marker3D" parent="Head" index="2"]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.25, -0.5)
+script = ExtResource("4_7518u")
+
+[node name="Player Audio" parent="." index="9" instance=ExtResource("4_txhu7")]
+
+[node name="Hitbox" type="Area3D" parent="." index="10"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" index="0"]
+shape = SubResource("CapsuleShape3D_s1bd7")

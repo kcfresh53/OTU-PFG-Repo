@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://8l01ylvuq2dl"]
+
+[ext_resource type="PackedScene" uid="uid://g4mowdj1skd7" path="res://models/foamBulletB.fbx" id="1_lmxln"]
+
+[node name="foamBulletB" instance=ExtResource("1_lmxln")]
+
+[node name="foamBulletB" parent="RootNode" index="0"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)

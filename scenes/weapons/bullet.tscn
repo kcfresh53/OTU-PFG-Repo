@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://03uk8nod6jqs"]
+
+[ext_resource type="Script" path="res://scripts/bullet.gd" id="1_4lll8"]
+[ext_resource type="PackedScene" uid="uid://8l01ylvuq2dl" path="res://models/fixed_foam_bullet.tscn" id="2_x1f45"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8r25p"]
+radius = 0.026351
+height = 0.114209
+
+[sub_resource type="Gradient" id="Gradient_icv4w"]
+offsets = PackedFloat32Array(0.268293, 1)
+colors = PackedColorArray(1, 0.168627, 0, 1, 1, 0.882353, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_gthxj"]
+gradient = SubResource("Gradient_icv4w")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_nq4ok"]
+emission_shape = 1
+emission_sphere_radius = 0.05
+direction = Vector3(0, 0, -1)
+spread = 16.04
+gravity = Vector3(0, -5, 0)
+initial_velocity_min = 0.01
+initial_velocity_max = 2.0
+linear_accel_min = 10.0
+linear_accel_max = 20.0
+scale_min = 0.02
+color_ramp = SubResource("GradientTexture1D_gthxj")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lfy2q"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_wihsx"]
+material = SubResource("StandardMaterial3D_lfy2q")
+radius = 0.013
+height = 0.013
+
+[node name="bullet" type="Node3D"]
+script = ExtResource("1_4lll8")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_8r25p")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="foamBulletB" parent="." instance=ExtResource("2_x1f45")]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0)
+
+[node name="shotParticle" type="GPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0536287)
+emitting = false
+amount = 25
+one_shot = true
+explosiveness = 0.6
+randomness = 1.0
+visibility_aabb = AABB(-0.0595333, -0.0325077, -0.116635, 0.119067, 0.0650153, 0.23327)
+process_material = SubResource("ParticleProcessMaterial_nq4ok")
+draw_pass_1 = SubResource("SphereMesh_wihsx")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

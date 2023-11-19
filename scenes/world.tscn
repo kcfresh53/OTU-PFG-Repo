@@ -1,0 +1,252 @@
+[gd_scene load_steps=28 format=3 uid="uid://dlpoayu8c1fm"]
+
+[ext_resource type="PackedScene" uid="uid://dtk01bbfdbi74" path="res://scenes/player.tscn" id="1_orm7g"]
+[ext_resource type="Texture2D" uid="uid://cqf0ga1uyx2sy" path="res://textures/gridbox prototype materials/prototype_512x512_grey4.png" id="2_a4dkq"]
+[ext_resource type="PhysicsMaterial" uid="uid://bklf2cx3fydt3" path="res://addons/character-controller/example/main/physics/stone.tres" id="2_vf6np"]
+[ext_resource type="Texture2D" uid="uid://c73awa1j7xfus" path="res://textures/skyboxes/AllSkyFree_Sky_ColdSunset_Equirect.png" id="4_tox6l"]
+[ext_resource type="PackedScene" uid="uid://c7rr8xes745cn" path="res://scenes/collectables/light_ammo_box.tscn" id="5_qlx1s"]
+[ext_resource type="PackedScene" uid="uid://cds1tkrxkis7m" path="res://scenes/weapons/revolver.tscn" id="5_qtg8g"]
+[ext_resource type="Texture2D" uid="uid://dvncspn8hr4r1" path="res://textures/GUI/t1.png" id="6_8mjwg"]
+[ext_resource type="Script" path="res://scripts/PlayerGUI.gd" id="6_f64br"]
+[ext_resource type="PackedScene" uid="uid://ca678w5pgxjdv" path="res://scenes/weapons/pistol.tscn" id="6_lwuym"]
+[ext_resource type="Texture2D" uid="uid://c6j1qsbwq8a5x" path="res://textures/GUI/t2.png" id="7_ycmw2"]
+[ext_resource type="Texture2D" uid="uid://hfhxbyaxrh0u" path="res://textures/GUI/mag.png" id="8_ckwtu"]
+[ext_resource type="Texture2D" uid="uid://vovyrup4jruq" path="res://textures/GUI/weapon icons/FlashGrenade.png" id="8_gxbro"]
+[ext_resource type="PackedScene" uid="uid://csh7aatalae" path="res://scenes/collectables/shotgun_ammo_box.tscn" id="9_hj02v"]
+[ext_resource type="Texture2D" uid="uid://knsdv16kv0v8" path="res://textures/GUI/totalAmmo.png" id="9_kj6tv"]
+[ext_resource type="FontFile" uid="uid://qfbdb70hv4b8" path="res://fonts/BebasNeue-Regular.ttf" id="9_pw87s"]
+[ext_resource type="Texture2D" uid="uid://dxl13mlwqbrqa" path="res://textures/GUI/weapon icons/Grenade.png" id="10_hxo31"]
+[ext_resource type="Texture2D" uid="uid://r72u0mspiaxh" path="res://textures/GUI/weapon icons/crosshairs/baseCrosshair.png" id="16_h341t"]
+[ext_resource type="PackedScene" uid="uid://bo5gf8fyeqkn2" path="res://scenes/weapons/pump_shotgun.tscn" id="17_og3h8"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a2x6u"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hyu7c"]
+albedo_texture = ExtResource("2_a4dkq")
+uv1_scale = Vector3(50, 50, 50)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_40u7j"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_mxjcg"]
+panorama = ExtResource("4_tox6l")
+
+[sub_resource type="Sky" id="Sky_ub12y"]
+sky_material = SubResource("PanoramaSkyMaterial_mxjcg")
+
+[sub_resource type="Environment" id="Environment_6jenb"]
+background_mode = 2
+sky = SubResource("Sky_ub12y")
+ambient_light_color = Color(0.466667, 0.996078, 1, 1)
+tonemap_mode = 2
+glow_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_albedo = Color(0.909804, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_b4l42"]
+font = ExtResource("9_pw87s")
+font_size = 30
+font_color = Color(0.752941, 0.509804, 0.0156863, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5e5eh"]
+font = ExtResource("9_pw87s")
+font_size = 30
+font_color = Color(0.768627, 0.768627, 0.768627, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_cpqh4"]
+font = ExtResource("9_pw87s")
+font_color = Color(0.768627, 0.768627, 0.768627, 1)
+
+[node name="world" type="Node3D"]
+
+[node name="Player" parent="." instance=ExtResource("1_orm7g")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.39275, 0)
+
+[node name="plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(100, 0, 0, 0, 100, 0, 0, 0, 100, 0, 0, 0)
+mesh = SubResource("PlaneMesh_a2x6u")
+surface_material_override/0 = SubResource("StandardMaterial3D_hyu7c")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="plane"]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+physics_material_override = ExtResource("2_vf6np")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="plane/StaticBody3D"]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0)
+shape = SubResource("WorldBoundaryShape3D_40u7j")
+
+[node name="Lighting" type="Node" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Lighting"]
+environment = SubResource("Environment_6jenb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0.817698, 0.575648, 0, -0.575648, 0.817698, 0, 44.5817, 40.8599)
+
+[node name="revolver" parent="." instance=ExtResource("5_qtg8g")]
+transform = Transform3D(0.85336, 0.521322, 0, -0.521322, 0.85336, 0, 0, 0, 1, 0.0822115, 1.33605, -4.73433)
+
+[node name="Pistol" parent="." instance=ExtResource("6_lwuym")]
+transform = Transform3D(0.762488, 0.647003, 0, -0.647003, 0.762488, 0, 0, 0, 1, 4.00524, 2, -3)
+
+[node name="lightAmmoBox" parent="." instance=ExtResource("5_qlx1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.33387, 2.26521, -4.14342)
+
+[node name="lightAmmoBox2" parent="." instance=ExtResource("5_qlx1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.323439, 2.26521, -5.83045)
+
+[node name="lightAmmoBox3" parent="." instance=ExtResource("5_qlx1s")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.323439, 2.26521, -7.67637)
+
+[node name="pumpShotgun" parent="." instance=ExtResource("17_og3h8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.97481, 1.36084, -3.27738)
+
+[node name="shotgun_ammo_box" parent="." instance=ExtResource("9_hj02v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.04393, 1.58811, -9.04104)
+
+[node name="shotgun_ammo_box2" parent="." instance=ExtResource("9_hj02v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.25991, 2.03137, 0)
+
+[node name="shotgun_ammo_box3" parent="." instance=ExtResource("9_hj02v")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.49792, 1.47457, -5.68357)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerGUI" type="Control" parent="CanvasLayer" node_paths=PackedStringArray("throwableTexture", "throwableTexture2", "weaponTexture", "crosshairTexture", "magLabel", "ammoLabel", "weaponNameLabel", "player")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_f64br")
+throwableTexture = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/frame1/throwable1")
+throwableTexture2 = NodePath("HBoxContainer/VBoxContainer/HBoxContainer/frame2/throwable2")
+weaponTexture = NodePath("HBoxContainer/weaponIcon")
+crosshairTexture = NodePath("CrosshairTexture")
+magLabel = NodePath("HBoxContainer/VBoxContainer/HBoxContainer2/frame3/magLabel")
+ammoLabel = NodePath("HBoxContainer/VBoxContainer/HBoxContainer2/frame4/ammoLabel")
+weaponNameLabel = NodePath("HBoxContainer/VBoxContainer/weaponName")
+player = NodePath("../../Player")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PlayerGUI"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/PlayerGUI/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="frame1" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("6_8mjwg")
+
+[node name="throwable1" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer/frame1"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 5.0
+offset_right = -15.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_gxbro")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="frame2" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+texture = ExtResource("7_ycmw2")
+
+[node name="throwable2" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer/frame2"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_right = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("10_hxo31")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = -5
+
+[node name="frame3" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("8_ckwtu")
+
+[node name="magLabel" type="Label" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer2/frame3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_b4l42")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="frame4" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+texture = ExtResource("9_kj6tv")
+
+[node name="ammoLabel" type="Label" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer/HBoxContainer2/frame4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_5e5eh")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="weaponName" type="Label" parent="CanvasLayer/PlayerGUI/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Hand"
+label_settings = SubResource("LabelSettings_cpqh4")
+horizontal_alignment = 2
+
+[node name="weaponIcon" type="TextureRect" parent="CanvasLayer/PlayerGUI/HBoxContainer"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 3
+
+[node name="CrosshairTexture" type="TextureRect" parent="CanvasLayer/PlayerGUI"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("16_h341t")
+expand_mode = 1
+stretch_mode = 5

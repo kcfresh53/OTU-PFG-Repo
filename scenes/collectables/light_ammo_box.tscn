@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://c7rr8xes745cn"]
+
+[ext_resource type="Script" path="res://scripts/AmmoBoxBase.gd" id="1_062wd"]
+[ext_resource type="PackedScene" uid="uid://ccgthd6l84x6n" path="res://models/PistolAmmo_Box.fbx" id="2_x5k1b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_21tvj"]
+size = Vector3(0.231767, 0.196307, 0.399581)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_jgb0u"]
+
+[node name="lightAmmoBox" type="RigidBody3D" node_paths=PackedStringArray("collider")]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_062wd")
+collider = NodePath("Area3D")
+ammoAmount = 20
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00935924, -0.0641988, -0.0062395)
+shape = SubResource("BoxShape3D_21tvj")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_jgb0u")
+
+[node name="PistolAmmo_Box" parent="." instance=ExtResource("2_x5k1b")]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)

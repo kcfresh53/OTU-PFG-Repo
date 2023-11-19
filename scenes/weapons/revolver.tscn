@@ -1,0 +1,137 @@
+[gd_scene load_steps=15 format=3 uid="uid://cds1tkrxkis7m"]
+
+[ext_resource type="Script" path="res://scripts/WeaponBase.gd" id="1_wdwtw"]
+[ext_resource type="PackedScene" uid="uid://dxyn44276gtc6" path="res://scenes/controllers/weapon_interaction_controller.tscn" id="2_7r5om"]
+[ext_resource type="PackedScene" uid="uid://03uk8nod6jqs" path="res://scenes/weapons/bullet.tscn" id="2_ktnqi"]
+[ext_resource type="AudioStream" uid="uid://dcwb12kvuwkci" path="res://sound/fx/Desert-Eagle-.50-AE-Close-Single-Gunshot-C-www.fesliyanstudios.com.mp3" id="3_he6i1"]
+[ext_resource type="PackedScene" uid="uid://dwxcwg6n5onx8" path="res://models/Revolver_02.fbx" id="3_mss4x"]
+[ext_resource type="Texture2D" uid="uid://cjnl5lpw3ctwi" path="res://textures/GUI/weapon icons/crosshairs/RevolverCrosshair.png" id="3_se58w"]
+[ext_resource type="Texture2D" uid="uid://blg3ivuy4g5ik" path="res://textures/GUI/weapon icons/RevolverIcon.png" id="4_7f7yr"]
+[ext_resource type="AudioStream" uid="uid://hc8xhqk5bclb" path="res://sound/fx/Rifle-Reloading-C-www.fesliyanstudios.com.mp3" id="4_s2k6v"]
+[ext_resource type="AudioStream" uid="uid://daexxtnf1je5h" path="res://sound/fx/Dry-Empty-GunFire-B-www.fesliyanstudios.com.mp3" id="5_5w2e2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0lc76"]
+size = Vector3(0.154807, 0.734727, 1)
+
+[sub_resource type="Animation" id="Animation_vtusk"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Revolver_02:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ltsl8"]
+resource_name = "reload"
+length = 0.25
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Revolver_02:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.1, 0.22, 0.25),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0), Vector3(0, 3.14159, 0.438078), Vector3(0, 3.14159, -0.506145), Vector3(0, 3.14159, 0.652753), Vector3(0, 3.14159, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.25),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Reload"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_4pp2f"]
+resource_name = "shoot"
+length = 0.15
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Revolver_02:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.02, 0.05, 0.13, 0.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 3.14159, 0), Vector3(0.188496, 3.14159, 0), Vector3(-0.429351, 3.14159, 0), Vector3(0.326377, 3.14159, 0), Vector3(0, 3.14159, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.03),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"Shoot"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_fm7dg"]
+_data = {
+"RESET": SubResource("Animation_vtusk"),
+"reload": SubResource("Animation_ltsl8"),
+"shoot": SubResource("Animation_4pp2f")
+}
+
+[node name="revolver" type="RigidBody3D" node_paths=PackedStringArray("animationPlayer", "audioPlayer", "interactionController", "collision", "bulletSpawnPos")]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("1_wdwtw")
+animationPlayer = NodePath("AnimationPlayer")
+audioPlayer = NodePath("AudioStreamPlayer3D")
+interactionController = NodePath("WeaponInteractionController")
+collision = NodePath("CollisionShape3D")
+bulletSpawnPos = NodePath("Marker3D")
+bulletModel = ExtResource("2_ktnqi")
+bulletType = 1
+weaponName = "Revolver"
+shoot_sound = ExtResource("3_he6i1")
+reload_sound = ExtResource("4_s2k6v")
+empty_sound = ExtResource("5_5w2e2")
+magsize = 5
+crosshair = ExtResource("3_se58w")
+silhouette = ExtResource("4_7f7yr")
+shotNum = 0
+spreadRange = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_0lc76")
+
+[node name="WeaponInteractionController" parent="." instance=ExtResource("2_7r5om")]
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0631207, -0.552604)
+
+[node name="Revolver_02" parent="." instance=ExtResource("3_mss4x")]
+transform = Transform3D(-0.2, 0, 5.07036e-07, 0, 0.2, 0, -5.07036e-07, 0, -0.2, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fm7dg")
+}
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
